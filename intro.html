@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Para Rafa 💌</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --verde-escuro: #013f38;
+      --verde-medio: #0f6e56;
+      --verde-claro: #55a783;
+      --verde-palido: #e1f5ee;
+      --creme: #fdf8f2;
+      --dourado: #c9a84c;
+    }
+
+    body {
+      background-color: var(--verde-escuro);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Lato', sans-serif;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Partículas de fundo */
+    .particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: var(--verde-claro);
+      opacity: 0;
+      animation: float-up linear infinite;
+    }
+
+    @keyframes float-up {
+      0%   { opacity: 0; transform: translateY(0) scale(0.5); }
+      10%  { opacity: 0.15; }
+      90%  { opacity: 0.08; }
+      100% { opacity: 0; transform: translateY(-100vh) scale(1.2); }
+    }
+
+    /* Texto de entrada */
+    .intro-text {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      margin-bottom: 3rem;
+      animation: fade-in 1.4s ease forwards;
+    }
+
+    .intro-text p {
+      color: var(--verde-claro);
+      font-size: 0.85rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      opacity: 0.7;
+      margin-bottom: 0.5rem;
+    }
+
+    .intro-text h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 5vw, 3rem);
+      color: var(--creme);
+      font-weight: 400;
+      line-height: 1.2;
+    }
+
+    .intro-text h1 em {
+      font-style: italic;
+      color: var(--dourado);
+    }
+
+    @keyframes fade-in {
+      from { opacity: 0; transform: translateY(-16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* === ENVELOPE === */
+    .envelope-wrap {
+      position: relative;
+      z-index: 2;
+      cursor: pointer;
+      animation: fade-in 1.4s ease 0.3s both;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .envelope {
+      width: 320px;
+      height: 220px;
+      position: relative;
+      filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
+      transition: transform 0.3s ease;
+    }
+
+    .envelope-wrap:hover .envelope {
+      transform: scale(1.03) translateY(-4px);
+    }
+
+    /* Corpo do envelope */
+    .env-body {
+      position: absolute;
+      inset: 0;
+      background: var(--creme);
+      border-radius: 4px 4px 8px 8px;
+      overflow: hidden;
+    }
+
+    /* Triângulos laterais e inferior */
+    .env-bottom {
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0; height: 0;
+      border-left: 160px solid transparent;
+      border-right: 160px solid transparent;
+      border-bottom: 110px solid #e8dfd2;
+    }
+
+    .env-left {
+      position: absolute;
+      top: 0; left: 0;
+      width: 0; height: 0;
+      border-top: 110px solid transparent;
+      border-bottom: 110px solid transparent;
+      border-left: 130px solid #ddd4c5;
+    }
+
+    .env-right {
+      position: absolute;
+      top: 0; right: 0;
+      width: 0; height: 0;
+      border-top: 110px solid transparent;
+      border-bottom: 110px solid transparent;
+      border-right: 130px solid #d4cabb;
+    }
+
+    /* Tampa (aba) do envelope */
+    .env-flap {
+      position: absolute;
+      top: 0; left: 0;
+      width: 0; height: 0;
+      border-left: 160px solid transparent;
+      border-right: 160px solid transparent;
+      border-top: 115px solid var(--verde-claro);
+      transform-origin: top center;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 4;
+    }
+
+    /* Lacre */
+    .env-seal {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 44px;
+      height: 44px;
+      background: var(--verde-escuro);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      z-index: 5;
+      border: 2px solid var(--dourado);
+      transition: opacity 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    /* Carta dentro do envelope */
+    .letter-peek {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 270px;
+      background: white;
+      border-radius: 4px;
+      padding: 10px 14px;
+      z-index: 3;
+      transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s,
+                  opacity 0.5s ease 0.3s;
+      opacity: 0;
+      box-shadow: 0 -4px 16px rgba(0,0,0,0.15);
+    }
+
+    .letter-peek p {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 0.75rem;
+      color: var(--verde-medio);
+      line-height: 1.5;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .letter-line {
+      height: 1px;
+      background: #e0d8cc;
+      margin: 5px 0;
+    }
+
+    /* Estado: aberto */
+    .envelope-wrap.open .env-flap {
+      transform: rotateX(180deg);
+    }
+
+    .envelope-wrap.open .env-seal {
+      opacity: 0;
+    }
+
+    .envelope-wrap.open .letter-peek {
+      transform: translateX(-50%) translateY(-120px);
+      opacity: 1;
+    }
+
+    /* Hint de clique */
+    .click-hint {
+      position: relative;
+      z-index: 2;
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      animation: fade-in 1.4s ease 0.8s both;
+    }
+
+    .click-hint span {
+      font-size: 0.78rem;
+      color: var(--verde-claro);
+      letter-spacing: 0.15em;
+      opacity: 0.6;
+      text-transform: uppercase;
+    }
+
+    .arrow-down {
+      width: 20px;
+      height: 20px;
+      border-right: 2px solid var(--verde-claro);
+      border-bottom: 2px solid var(--verde-claro);
+      transform: rotate(45deg);
+      opacity: 0.4;
+      animation: bounce 1.6s ease infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: rotate(45deg) translateY(0); }
+      50%       { transform: rotate(45deg) translateY(5px); }
+    }
+
+    /* Overlay de transição */
+    .transition-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--verde-escuro);
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s ease;
+    }
+
+    .transition-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Partículas de fundo -->
+  <div class="particles" id="particles"></div>
+
+  <!-- Texto superior -->
+  <div class="intro-text">
+    <p>uma surpresa para o amor da minha vida!</p>
+    <h1>Feliz Aniversário,<br><em>Rafa</em> 💖</h1>
+  </div>
+
+  <!-- Envelope -->
+  <div class="envelope-wrap" id="envelope" onclick="openEnvelope()" role="button" aria-label="Abrir carta">
+    <div class="envelope">
+      <div class="env-body">
+        <div class="env-bottom"></div>
+        <div class="env-left"></div>
+        <div class="env-right"></div>
+      </div>
+      <div class="letter-peek">
+        <p>Bem-vinda meu AMOR🌹</p>
+        <div class="letter-line"></div>
+        <p>Uma carta aberta, feita com amor...</p>
+      </div>
+      <div class="env-flap"></div>
+      <div class="env-seal">💌</div>
+    </div>
+  </div>
+
+  <!-- Dica de clique -->
+  <div class="click-hint" id="hint">
+    <span>clique para abrir</span>
+    <div class="arrow-down"></div>
+  </div>
+
+  <!-- Overlay de transição -->
+  <div class="transition-overlay" id="overlay"></div>
+
+  <script>
+    // Partículas flutuantes
+    const container = document.getElementById('particles');
+    for (let i = 0; i < 22; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const size = Math.random() * 5 + 2;
+      p.style.cssText = `
+        width: ${size}px;
+        height: ${size}px;
+        left: ${Math.random() * 100}%;
+        bottom: -10px;
+        animation-duration: ${Math.random() * 12 + 10}s;
+        animation-delay: ${Math.random() * 10}s;
+      `;
+      container.appendChild(p);
+    }
+
+    let opened = false;
+
+    function openEnvelope() {
+      if (opened) return;
+
+      const env = document.getElementById('envelope');
+      const hint = document.getElementById('hint');
+      const overlay = document.getElementById('overlay');
+
+      // Abre o envelope
+      env.classList.add('open');
+      hint.style.opacity = '0';
+      opened = true;
+
+      // Após a animação da carta aparecer, redireciona
+      setTimeout(() => {
+        overlay.classList.add('active');
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 600);
+      }, 1400);
+    }
+  </script>
+</body>
+</html>
